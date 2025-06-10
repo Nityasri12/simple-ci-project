@@ -2,21 +2,27 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Clone Repo') {
             steps {
-                echo 'Building the project...'
+                git 'https://github.com/Nityasri12/simple-ci-project.git'
             }
         }
 
-        stage('Test') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Running tests...'
+                script {
+                    echo '🔧 Building Docker image...'
+                    bat 'docker build -t simple-ci-image .'
+                }
             }
         }
 
-        stage('Deploy') {
+        stage('Run Docker Container') {
             steps {
-                echo 'Deploying the project...'
+                script {
+                    echo '🚀 Running Docker container...'
+                    bat 'docker run --rm simple-ci-image'
+                }
             }
         }
     }
